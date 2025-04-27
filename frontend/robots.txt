@@ -1,3 +1,0 @@
-@app.route('/robots.txt')
-def robots():
-    return "User-agent: *\nDisallow:", 200, {'Content-Type': 'text/plain'}
