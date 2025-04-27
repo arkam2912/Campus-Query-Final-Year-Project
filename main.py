@@ -244,7 +244,7 @@ def update_question():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=True)
 
