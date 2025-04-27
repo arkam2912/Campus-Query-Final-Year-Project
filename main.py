@@ -1,17 +1,18 @@
-from flask import Flask, request, jsonify # type: ignore
-from flask_cors import CORS # type: ignore
-from langchain_community.vectorstores import FAISS # type: ignore
-from langchain_community.document_loaders import CSVLoader # type: ignore
-from langchain.prompts import PromptTemplate # type: ignore
-from langchain.chains import RetrievalQA # type: ignore
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI # type: ignore
-from flask_sqlalchemy import SQLAlchemy # type: ignore
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from langchain_community.vectorstores import FAISS
+from langchain_community.document_loaders import CSVLoader
+from langchain.prompts import PromptTemplate
+from langchain.chains import RetrievalQA
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from flask_sqlalchemy import SQLAlchemy
 import os
 import csv
 
 # Initialize Flask App
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin Requests (important for React frontend)
+CORS(app)
+
 # Configure SQLite Database
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///knowledgebase.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -95,16 +96,15 @@ def ask_question():
     if not user_query:
         return jsonify({"error": "Query not provided"}), 400
 
-    # Check if the query matches one of the predefined FAQ questions
     if user_query in faq_answers:
         answer = faq_answers[user_query]
     else:
-        # Process the query using LangChain QA Chain if it's not an FAQ
         response = qa_chain.invoke({"query": user_query})
         answer = response["result"]
 
     return jsonify({"answer": answer})
-CSV_FILE_PATH = "dit_faqs_data - Sheet1.csv" 
+
+CSV_FILE_PATH = "dit_faqs_data - Sheet1.csv"
 
 def load_questions_from_csv():
     questions = []
@@ -112,24 +112,20 @@ def load_questions_from_csv():
         with open(CSV_FILE_PATH, newline='', encoding="utf-8") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if len(row) == 2:  # Ensure valid question-answer pairs
+                if len(row) == 2:
                     questions.append({"question": row[0], "answer": row[1]})
     except FileNotFoundError:
-        return []  # Return an empty list if the file doesn't exist
+        return []
     return questions
 
-# New endpoint to return all questions and answers for the admin
+# Admin Panel Route
 @app.route('/admin/questions', methods=['GET'])
 def get_all_questions():
-    # This endpoint is protected and only accessible by admins.
-    # Admin authentication check can be added here.
     admin_credentials = {
         "Amitesh@67": "Amitesh@67",
         "Arkam@18": "Arkam@18",
         "kashif@12": "kashif@23"
     }
-    
-    # Simple check for admin authentication
     auth = request.headers.get('Authorization')
     if not auth or auth not in admin_credentials:
         return jsonify({"error": "Unauthorized access"}), 403
@@ -137,7 +133,7 @@ def get_all_questions():
     questions = load_questions_from_csv()
     return jsonify(questions)
 
-# API to add a question
+# Add Question
 @app.route('/add_question', methods=['POST'])
 def add_question():
     data = request.json
@@ -146,56 +142,44 @@ def add_question():
     db.session.commit()
     return jsonify({"message": "Question added successfully!"}), 200
 
-# API to fetch latest 6 questions
+# Get Latest Questions
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
     questions = Knowledge.query.order_by(Knowledge.id.desc()).limit(6).all()
     return jsonify([{"question": q.question, "answer": q.answer} for q in questions]), 200
 
-CSV_FILE_PATH = "dit_faqs_data - Sheet1.csv" 
-
-# Route to save the question-answer pair
-
-
-CSV_FILE_PATH = "dit_faqs_data - Sheet1.csv"
-# Ensure CSV file has headers if it doesn't exist
+# Save New Question to CSV
 if not os.path.exists(CSV_FILE_PATH):
     with open(CSV_FILE_PATH, "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Question", "Answer"])  # ✅ Add column headers
+        writer.writerow(["Question", "Answer"])
 
 @app.route("/save-question", methods=["POST"])
 def save_question():
     try:
         data = request.get_json()
 
-        # Debugging: Print received data
-        print("Received data:", data)
-
-        # Validate input data
         if not data or "question" not in data or "answer" not in data:
-            return jsonify({"error": "Invalid data format"}), 400  # Bad Request
+            return jsonify({"error": "Invalid data format"}), 400
 
-        question = data["question"].strip()  # Remove extra spaces
+        question = data["question"].strip()
         answer = data["answer"].strip()
 
-        # Save to CSV (handle commas by using `quotechar='"'`)
         with open(CSV_FILE_PATH, "a", newline="") as file:
-            writer = csv.writer(file)  # ✅ Ensures proper CSV formatting
-            writer.writerow([question, f'"{answer}"'])  # ✅ Properly stores in two columns
+            writer = csv.writer(file)
+            writer.writerow([question, f'"{answer}"'])
 
-            # Rebuild the vector database 🔁
         create_vector_db()
-
         global qa_chain
-        qa_chain = get_qa_chain()  # Refresh the chain with the updated DB
+        qa_chain = get_qa_chain()
 
         return jsonify({"message": "Question saved successfully!"}), 200
 
     except Exception as e:
-        print("Error:", str(e))  # Log error in terminal
-        return jsonify({"error": "Internal Server Error"}), 500  # Server error
-    
+        print("Error:", str(e))
+        return jsonify({"error": "Internal Server Error"}), 500
+
+# Update a Question
 @app.route("/update-question", methods=["PUT"])
 def update_question():
     try:
@@ -206,46 +190,35 @@ def update_question():
         new_answer = data.get("answer")
 
         if not old_question or not new_question or not new_answer:
-            return jsonify({"error": "Missing required fields"}), 400
+            return jsonify({"error": "Invalid data format"}), 400
 
-        updated_rows = []
-        found = False
+        records = load_questions_from_csv()
+        updated = False
 
-        # Read existing data and update
-        with open(CSV_FILE_PATH, newline='', encoding="utf-8") as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                if len(row) != 2:
-                    continue
-                question, answer = row
-                if question.strip() == old_question.strip():
-                    updated_rows.append([new_question.strip(), new_answer.strip()])
-                    found = True
-                else:
-                    updated_rows.append([question, answer])
-
-        if not found:
-            return jsonify({"error": "Question not found"}), 404
-
-        # Rewrite CSV with updated content
-        with open(CSV_FILE_PATH, "w", newline='', encoding="utf-8") as csvfile:
+        with open(CSV_FILE_PATH, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerows(updated_rows)
+            writer.writerow(["Question", "Answer"])
 
-        # Rebuild FAISS vector DB
-        create_vector_db()
-        global qa_chain
-        qa_chain = get_qa_chain()
+            for record in records:
+                if record["question"] == old_question:
+                    writer.writerow([new_question, new_answer])
+                    updated = True
+                else:
+                    writer.writerow([record["question"], record["answer"]])
 
-        return jsonify({"message": "Question updated successfully"}), 200
+        if updated:
+            create_vector_db()
+            global qa_chain
+            qa_chain = get_qa_chain()
+            return jsonify({"message": "Question updated successfully!"}), 200
+        else:
+            return jsonify({"error": "Old question not found"}), 404
 
     except Exception as e:
         print("Error:", str(e))
         return jsonify({"error": "Internal Server Error"}), 500
 
-
-if __name__ == "_main_":
-    port = int(os.environ.get("PORT", 5000))  # not 5001 here
-    app.run(host="0.0.0.0", port=port, debug=True)
-
-
+# Final step: Run the App Properly for Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Default 5000 locally
+    app.run(host="0.0.0.0", port=port)
