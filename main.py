@@ -245,7 +245,7 @@ def update_question():
 
 
 if __name__ == "_main_":
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 5000))  # not 5001 here
     app.run(host="0.0.0.0", port=port, debug=True)
 
 
