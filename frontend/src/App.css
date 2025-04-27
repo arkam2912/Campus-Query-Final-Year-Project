@@ -1,0 +1,705 @@
+/* Reset and General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(to bottom, #ff7f50, #1e90ff);
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent the entire page from scrolling */
+}
+
+/* Sidebar - Fixed to Left */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2c2c2c;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+  width: 60px;
+  overflow: hidden;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Sidebar Buttons */
+.nav-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.nav-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.nav-button.active {
+  background-color: #007bff;
+}
+
+.nav-button:hover {
+  background-color: #555;
+}
+
+/* When sidebar is collapsed, hide text */
+.sidebar.collapsed .nav-title,
+.sidebar.collapsed .nav-button {
+  display: none;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 250px;
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 250px);
+  padding-top: 50px;
+  flex-direction: column;
+  height: 100%; /* Full height */
+  overflow: hidden; /* Prevent the main content from scrolling */
+}
+
+/* Adjust width when sidebar is collapsed */
+.sidebar-collapsed .main-content {
+  margin-left: 60px;
+  width: calc(100% - 60px);
+}
+
+/* Wrapper ensures a clean layout */
+.content-wrapper {
+  text-align: center;
+  width: 800px;
+  flex-grow: 1; /* Take the remaining height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Logo */
+.logo {
+  width: 150px;
+  margin-bottom: 50px;
+  margin: auto;
+}
+
+/* Title */
+.title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+/* Ask a Question Box */
+.question-box {
+  background-color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* FAQ Section - Scrollable */
+.faq-section {
+  margin-top: 25px;
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+/* FAQ Title */
+.faq-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+  text-align: center;
+  color: #ffffff;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* FAQ Box - Fixed Height and Scroll */
+.faq-box {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-height: 300px; /* Increased to allow more questions */
+  overflow-y: auto;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* When FAQ is closed, collapse it */
+.faq-box.hidden {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+/* FAQ List */
+.faq-list {
+  list-style: none;
+  padding: 0;
+}
+
+.faq-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #444;
+  font-size: 16px;
+}
+
+.faq-list li:last-child {
+  border-bottom: none;
+}
+
+/* Input Field */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Hover effect on FAQ items */
+.faq-item {
+  transition: all 0.3s ease;
+  padding: 5px 0;
+}
+
+.faq-item:hover {
+  cursor: pointer;
+  color: rgb(171, 224, 115);
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Submit button styles */
+.submit-button {
+  margin-top: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Clear button styles */
+.clear-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.clear-button:hover {
+  background-color: #d32f2f;
+}
+
+/* FAQ Answer */
+.faq-answer {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #150c0c;
+  border-left: 3px solid #4caf50;
+  border-radius: 5px;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-width: 100%;
+}
+/* Active button for navigation */
+.nav-button.active {
+  background-color: blue;
+  color: white;
+}
+
+/* Error message styling */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.create-knowledgebase {
+  padding: 20px;
+  background-color: #340a0a;
+  border-radius: 10px;
+}
+
+.create-knowledgebase .form-group {
+  margin-bottom: 15px;
+}
+
+.create-knowledgebase label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.create-knowledgebase input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.create-knowledgebase .enter-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.create-knowledgebase .enter-button:hover {
+  background-color: #45a049;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.nav-button {
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button.active {
+  background-color: blue;
+  color: white;
+}
+
+.nav-button:hover {
+  background-color: green;
+}
+
+/* Admin Login Form */
+.admin-login {
+  background-color: rgb(63, 95, 101);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin-left: 100px;
+}
+
+.admin-login h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.admin-login input {
+  width: 48%;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-right: 4%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.admin-login input:last-child {
+  margin-right: 0;
+}
+
+.admin-login button {
+  width: 55%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.admin-login button:hover {
+  background-color: #45a049;
+}
+
+.admin-login .error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Styling for Admin Login Page */
+.admin-login {
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* Admin Login Fields */
+.admin-login input {
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 1rem;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Admin Login Button */
+.admin-login button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-login button:hover {
+  background-color: #45a049;
+}
+/* Admin Panel Styles */
+.admin-panel {
+  background-color: #291212;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100000px;
+  margin: 1px -10px;
+  height: calc(85vh - 140px);
+  overflow: hidden;
+}
+
+/* Updated Scrollable Questions & Answers Section */
+.questions-container {
+  max-width: 1200px;
+  width: 100%;
+  height: calc(80vh - 200px);
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #270f0f;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(67, 55, 55, 0.1);
+}
+
+/* Question and Answer Items */
+.admin-panel ul {
+  list-style-type: none;
+  padding: 4;
+}
+
+.admin-panel li {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease;
+}
+
+.admin-panel li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Question Styling */
+.admin-panel .question {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Answer Styling */
+.admin-panel .answer {
+  font-size: 1.1rem;
+  color: #666;
+  padding-left: 20px;
+  border-left: 3px solid #4caf50;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+/* Logout Button Positioned at Top Right */
+.logout-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s;
+  z-index: 1000;
+}
+
+.logout-button:hover {
+  background-color: #45a049;
+}
+.add-button {
+  position: absolute;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.new-form {
+  position: relative;
+  top: 20px;
+  right: 100px;
+  width: 600px;
+  background: #352020;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 200px;
+}
+
+.new-form h3 {
+  margin-bottom: 10px;
+}
+
+.new-form input,
+.new-form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.new-form button {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.previous-questions {
+  width: 100%;
+  max-width: 800px;
+  height: 500px;
+  overflow-y: auto;
+  background: #b15353;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.previous-questions h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.qa-box {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.qa-box p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.qa-box strong {
+  color: #222;
+}
+.go-to-main {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgb(0, 4, 255);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.go-to-main:hover {
+  background-color: brown;
+}
+.admin-panel {
+  position: relative;
+  padding: 20px;
+}
+
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.logout-button:hover {
+  background-color: #cc0000;
+}
+
+/* Floating Button Container */
+.floating-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Floating Button */
+.floating-button {
+  background-color: #880d0d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.floating-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+/* Floating Options (Add New, Edit) */
+.floating-options {
+  background-color: #208de6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.option-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.option-button:hover {
+  background-color: #218838;
+}
+.new-question-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.new-question-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.new-question-container button {
+  width: 30%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 230px;
+}
+
+.new-question-container button:first-of-type {
+  background: #28a745;
+  color: white;
+}
+
+.new-question-container button:last-of-type {
+  background: #dc3545;
+  color: white;
+}
+
+.new-question-container button:hover {
+  opacity: 0.9;
+}
