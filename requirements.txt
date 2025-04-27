@@ -6,3 +6,4 @@ langchain
 flask
 flask_cors
 flask_sqlalchemy
+gunicorn
