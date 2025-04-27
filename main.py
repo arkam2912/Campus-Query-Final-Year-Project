@@ -222,6 +222,7 @@ def update_question():
 @app.route("/", methods=["GET"])
 def home():
     return "Server is running!", 200
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Default 5000 locally
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
+
+
