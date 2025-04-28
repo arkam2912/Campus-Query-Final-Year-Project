@@ -594,7 +594,6 @@ return (
           )}
         </div>
       </div>
-    </div>
   );
 };
 
