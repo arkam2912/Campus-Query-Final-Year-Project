@@ -575,22 +575,18 @@ return (
     )}
 
     {Array.isArray(allQuestionsAndAnswers) && allQuestionsAndAnswers.length > 0 ? (
-      <div className="questions-container">
-        <ul>
-          {allQuestionsAndAnswers.map((item, index) => (
-            <li key={index}>
-              <div className="question">{item.question}</div>
-              <div className="answer">{item.answer}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ) : (
-      <p>No questions found.</p>
-    )}
+     <div className="questions-container">
+  <ul>
+    {allQuestionsAndAnswers.map((item, index) => (
+      <li key={index}>
+        <div className="question">{item.question}</div>
+        <div className="answer">{item.answer}</div>
+      </li>
+    ))}
   </ul>
+  {/* If no questions, show this message */}
+  {allQuestionsAndAnswers.length === 0 && <p>No questions found.</p>}
 </div>
-  );
-};
+
 
 export default App;
