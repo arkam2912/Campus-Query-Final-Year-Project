@@ -551,51 +551,45 @@ return (
 )}
 
 
-              {/* Display Questions and Answers */}
-              <div className="questions-container">
-                <ul>
-                  {/* Show new question input at the top when adding */}
-                  {isAdding && (
-                    <div className="new-question-container">
-                      <input
-                        type="text"
-                        placeholder="Enter new question"
-                        value={newQuestion}
-                        onChange={(e) => setNewQuestion(e.target.value)}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Enter new answer"
-                        value={newAnswer}
-                        onChange={(e) => setNewAnswer(e.target.value)}
-                      />
-                      <button onClick={handleSaveNewQuestion}>Save</button>
-                      <button onClick={() => setIsAdding(false)}>Cancel</button>
-                    </div>
-                  )}
-
-                  {Array.isArray(allQuestionsAndAnswers) &&
-                  allQuestionsAndAnswers.length > 0 ? (
-                    <div className="questions-container">
-                      <ul>
-                        {allQuestionsAndAnswers.map((item, index) => (
-                          <li key={index}>
-                            <div className="question">{item.question}</div>
-                            <div className="answer">{item.answer}</div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    <p>No questions found.</p> // This will only appear if the list is empty
-                  )}
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
+             {/* Display Questions and Answers */}
+<div className="questions-container">
+  <ul>
+    {/* Show new question input at the top when adding */}
+    {isAdding && (
+      <div className="new-question-container">
+        <input
+          type="text"
+          placeholder="Enter new question"
+          value={newQuestion}
+          onChange={(e) => setNewQuestion(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Enter new answer"
+          value={newAnswer}
+          onChange={(e) => setNewAnswer(e.target.value)}
+        />
+        <button onClick={handleSaveNewQuestion}>Save</button>
+        <button onClick={() => setIsAdding(false)}>Cancel</button>
       </div>
-    </div>
+    )}
+
+    {Array.isArray(allQuestionsAndAnswers) && allQuestionsAndAnswers.length > 0 ? (
+      <div className="questions-container">
+        <ul>
+          {allQuestionsAndAnswers.map((item, index) => (
+            <li key={index}>
+              <div className="question">{item.question}</div>
+              <div className="answer">{item.answer}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : (
+      <p>No questions found.</p> {/* This will only appear if the list is empty */}
+    )}
+  </ul>
+</div>
   );
 };
 
