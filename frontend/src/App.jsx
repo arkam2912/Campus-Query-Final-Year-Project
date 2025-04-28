@@ -586,7 +586,7 @@ return (
         </ul>
       </div>
     ) : (
-      <p>No questions found.</p> {/* This will only appear if the list is empty */}
+      <p>No questions found.</p>
     )}
   </ul>
 </div>
